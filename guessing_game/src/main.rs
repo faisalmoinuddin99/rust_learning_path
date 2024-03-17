@@ -1,22 +1,32 @@
-use std::io ;
+use std::io;
+use rand::Rng;
+use std::cmp::Ordering;
 
 fn main() {
-    println!("Guess the number!") ;
+    println!("Guess the number!");
 
-    println!("Please input your guess :") ;
+    let secret_number = rand::thread_rng().gen_range(1..=100);
 
-    let apple = 5 ; // immutable
-    let mut banana = 12 ; // mutable
+    println!("The secret number = {secret_number}");
 
+    println!("Please input your guess :");
 
-    let mut guess = String::new() ;
+    let mut guess = String::new();
 
     io::stdin()
         .read_line(&mut guess)
-        .expect("Failed to read line") ;
+        .expect("Failed to read line");
 
-    println!("You guessed: {guess}") ;
+    println!("You guessed: {guess}");
 
-    let total = apple + banana ;
-    println!("Total = {total}")
+    /* shadowing - lets us reuse the guess variable name rather than forcing us to create two unique
+     variables, such as guess_str and guess
+     */
+    let guess: u32 = guess.trim().parse().expect("Please type a number");
+
+    match guess.cmp(&secret_number) {
+        Ordering::Less => println!("Too Small"),
+        Ordering::Equal => println!("You Win"),
+        Ordering::Greater => println!("Too Big")
+    }
 }
